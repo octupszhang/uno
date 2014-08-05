@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class LoginCheckFilter implements Filter {
 
-    private static final String LOGIN_URI = "/uno/login";
+    private static final String LOGIN_URI = "/uno/login.do";
 
     private static final String COOKIE_ID = "userId";
 
