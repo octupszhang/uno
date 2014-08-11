@@ -1,7 +1,6 @@
 /*
- * Copyright (C), 2002-2014, 苏宁易购电子商务有限公司
  * FileName: ExceptionHandler.java
- * Author:   13071604
+ * Author:   wormchaos
  * Date:     2014-8-5 下午2:35:02
  * Description: //模块目的、功能描述      
  * History: //修改记录
@@ -10,22 +9,27 @@
  */
 package com.wormchaos.handler;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.wormchaos.util.GsonView;
 import com.wormchaos.util.StringUtils;
 import com.wormchaos.util.constant.UnoConfigConstants;
+import com.wormchaos.util.constant.UnoConstants;
 import com.wormchaos.util.constant.UnoErrConstants;
+import com.wormchaos.util.constant.UnoJsonErrConstants;
 import com.wormchaos.util.exception.UnoException;
 
 /**
  * 〈一句话功能简述〉<br> 
  * 异常处理
  *
- * @author 13071604
+ * @author wormchaos
  * @see [相关类/方法]（可选）
  * @since [产品/模块版本] （可选）
  */
@@ -52,13 +56,39 @@ public class ExceptionHandler implements HandlerExceptionResolver{
             if (StringUtils.isBlank(errorCode)) {
                 errorCode = UnoErrConstants.DEFAULT_ERROR;
             }
-            if (StringUtils.isBlank(errorMsg)) {
-                errorMsg = UnoErrConstants.ERROR_MSG_MAPPING.get(errorCode);
+            
+            // 如果错误是用户需要登录，则重定向
+            if(errorCode.equals(UnoErrConstants.USER_NEED_LOGIN)){
+                try {
+                    response.sendRedirect("/uno/login.do");
+                } catch (IOException e) {
+                    // do nothing
+                }
+            }
+            
+            // 如果ajax请求异常返回json
+            if(UnoException.isJsonException(errorCode)){
+                // 返回GsonView
+                GsonView gsonView = new GsonView();
+                if (StringUtils.isBlank(errorMsg)) {
+                    errorMsg = UnoJsonErrConstants.ERROR_MSG_MAPPING.get(errorCode);
+                }
+                gsonView.addStaticAttribute(UnoConstants.SUCCESS_FLG, UnoConstants.FAILED);
+                gsonView.addStaticAttribute(UnoConstants.ERROR_CODE, errorCode);
+                gsonView.addStaticAttribute(UnoConstants.ERROR_MSG, errorMsg);
+                model.setView(gsonView);
+                return model;
+            }else{
+                if (StringUtils.isBlank(errorMsg)) {
+                    errorMsg = UnoErrConstants.ERROR_MSG_MAPPING.get(errorCode);
+                }
+                model.addObject(UnoConstants.ERROR_CODE, errorCode);
+                model.addObject(UnoConstants.ERROR_MSG, errorMsg);
             }
 
         }
-        model.addObject("errorMsg", errorMsg);
+        
         return model;
     }
-
+    
 }

@@ -1,7 +1,6 @@
 /*
- * Copyright (C), 2002-2014, 苏宁易购电子商务有限公司
  * FileName: UnoException.java
- * Author:   13071604
+ * Author:   wormchaos
  * Date:     2014-8-5 下午4:42:50
  * Description: //模块目的、功能描述      
  * History: //修改记录
@@ -14,7 +13,7 @@ package com.wormchaos.util.exception;
  * 〈一句话功能简述〉<br> 
  * 〈功能详细描述〉
  *
- * @author 13071604
+ * @author wormchaos
  * @see [相关类/方法]（可选）
  * @since [产品/模块版本] （可选）
  */
@@ -42,6 +41,23 @@ public class UnoException extends Exception{
     public UnoException(String errorCode, String message, Throwable cause) {
         super(message, cause);
         this.errorCode = errorCode;
+    }
+    
+    /**
+     * 
+     * 功能描述: <br>
+     * 检查是否是Json错误
+     *
+     * @param errorCode
+     * @return
+     * @see [相关类/方法](可选)
+     * @since [产品/模块版本](可选)
+     */
+    public static boolean isJsonException(String errorCode){
+        if (errorCode.startsWith("J")) {
+            return true;
+        }
+        return false;
     }
 
     /**

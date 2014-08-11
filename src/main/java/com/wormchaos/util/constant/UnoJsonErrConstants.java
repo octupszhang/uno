@@ -1,7 +1,7 @@
-/*
- * FileName: UnoErrConstants.java
+/**
+ * FileName: UnoJsonErrConstants.java
  * Author:   wormchaos
- * Date:     2014-8-5 下午4:45:48
+ * Date:     2014-8-7 下午7:49:00
  * Description: //模块目的、功能描述      
  * History: //修改记录
  * <author>      <time>      <version>    <desc>
@@ -13,34 +13,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 〈一句话功能简述〉<br>
+ * 〈一句话功能简述〉<br> 
  * 〈功能详细描述〉
- * 
+ *
  * @author wormchaos
  * @see [相关类/方法]（可选）
  * @since [产品/模块版本] （可选）
  */
-public class UnoErrConstants {
+public class UnoJsonErrConstants {
 
     /**
      * 系统异常
      */
-    public static final String DEFAULT_ERROR = "U0001";
-
-    /**
-     * 用户鉴权异常
-     */
-    public static final String USER_TOKEN_ERROR = "U3001";
-
-    /**
-     * 用户已登录
-     */
-    public static final String USER_ALREADY_LOGIN = "U3002";
-
-    /**
-     * 用户需要重新登录
-     */
-    public static final String USER_NEED_LOGIN = "U3003";
+    public static final String DEFAULT_ERROR = "J0001";
 
     /**
      * 错误码消息映射
@@ -52,9 +37,6 @@ public class UnoErrConstants {
         private static final long serialVersionUID = -1299431555757561464L;
         {
             put(DEFAULT_ERROR, "系统异常");
-            put(USER_TOKEN_ERROR, "用户鉴权异常");
-            put(USER_ALREADY_LOGIN, "用户已登录");
-            put(USER_NEED_LOGIN, "用户需要重新登录");
         }
     };
 }

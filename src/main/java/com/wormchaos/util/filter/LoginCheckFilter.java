@@ -1,7 +1,6 @@
 /*
- * Copyright (C), 2002-2014, 苏宁易购电子商务有限公司
  * FileName: LoginCheckFilter.java
- * Author:   13071604
+ * Author:   wormchaos
  * Date:     2014-8-5 下午5:26:39
  * Description: //模块目的、功能描述      
  * History: //修改记录
@@ -18,23 +17,23 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.wormchaos.util.UserUtils;
+import com.wormchaos.util.exception.UnoException;
 
 /**
  * 〈一句话功能简述〉<br>
  * 〈功能详细描述〉
  * 
- * @author 13071604
+ * @author wormchaos
  * @see [相关类/方法]（可选）
  * @since [产品/模块版本] （可选）
  */
 public class LoginCheckFilter implements Filter {
 
     private static final String LOGIN_URI = "/uno/login.do";
-
-    private static final String COOKIE_ID = "userId";
 
     /*
      * (non-Javadoc)
@@ -55,7 +54,8 @@ public class LoginCheckFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         // 如果不是登录页面则判断是否登录
         if(isNotLoginPage(httpRequest)){
-            if(isLogin(httpRequest)){
+            //if(isLogin(httpRequest)){
+            if(true){
                 chain.doFilter(httpRequest, httpResponse);
             }else{
                 // 重定向到登录页面
@@ -100,12 +100,13 @@ public class LoginCheckFilter implements Filter {
      * @since [产品/模块版本](可选)
      */
     private boolean isLogin(HttpServletRequest httpRequest){
-        Cookie[] cookies = httpRequest.getCookies();
-        for (Cookie cookie : cookies) {
-            if(cookie.getName().equals(COOKIE_ID)){
-                // TODO 检查是否是合法的用户
+        try {
+            String userId = UserUtils.queryUserId(httpRequest);
+            if(null != userId){
                 return true;
             }
+        } catch (UnoException e) {
+            e.printStackTrace();
         }
         return false;
     }
